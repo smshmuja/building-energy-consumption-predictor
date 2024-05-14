@@ -41,6 +41,15 @@ st.markdown("""
         margin-right: auto;
         width: 30%; /* Adjust the width as needed */
     }
+    .graph-container {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+    .graph-inner {
+        max-width: 1000px; /* Adjust the max width as needed */
+        width: 100%;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -51,7 +60,7 @@ st.markdown("<h1 class='title'>⚡ Building Energy Consumption Predictor ⚡</h1
 st.markdown("<div class='subtitle'>Optimize energy usage with your eco-consultant friend.</div>", unsafe_allow_html=True)
 
 # Use columns to position the Superman image just below the middle of the title
-col1, col2, col3 = st.columns([1,0.5,1])
+col1, col2, col3 = st.columns([1, 0.5, 1])
 
 with col2:
     st.image("superman.png", width=160)  # Adjust the width as needed
@@ -175,6 +184,8 @@ if st.sidebar.button('Predict Consumption'):
             align-items: center;  /* Vertically centers the items in the container */
             justify-content: center;  /* Horizontally centers the content */
             text-align: center;
+            margin-top: 15px;
+            margin-bottom: 15px;
         }
         .blinking {
             animation: blink-animation 1.5s steps(5, start) infinite;
@@ -242,7 +253,21 @@ if st.sidebar.button('Predict Consumption'):
         labels={"index": "Features", "y": "Feature Contribution %"}  # Changing 'value' to 'y'
     )
     fig.update_layout(
+        title_x=0.22,  # Center the title
+        title_y=1,  # Adjust the title closer to the graph
+        title=dict(
+            font=dict(
+                size=20  # Adjust the font size if needed
+            )
+        ),
         transition_duration=500,
-        yaxis_title="Feature Contribution %"  # Explicitly setting y-axis title
+        yaxis_title="Feature Contribution %",  # Explicitly setting y-axis title
+        margin=dict(l=20, r=20, t=40, b=20),  # Add margin to adjust spacing
+        plot_bgcolor='rgba(0,0,0,0)',  # Make the background transparent
+        paper_bgcolor='rgba(0,0,0,0)'  # Make the paper background transparent
     )
+
+    # Center the graph
+    st.markdown("<div class='graph-container'><div class='graph-inner'>", unsafe_allow_html=True)
     st.plotly_chart(fig, use_container_width=True)
+    st.markdown("</div></div>", unsafe_allow_html=True)
