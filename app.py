@@ -54,7 +54,7 @@ st.markdown("<div class='subtitle'>Optimize energy usage with your eco-conultant
 col1, col2, col3 = st.columns([1,0.5,1])
 
 with col2:
-    st.image(r"C:\Users\SAM\Desktop\WBSBootcamp\Final Project\MY_PROJECT\superman.png", width=160)  # Adjust the width as needed
+    st.image("superman.png", width=160)  # Adjust the width as needed
 
 # Define other elements of the sidebar or main page below this
 st.sidebar.header('Enter the features')
