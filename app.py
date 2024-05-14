@@ -48,7 +48,7 @@ st.markdown("""
 st.markdown("<h1 class='title'>⚡ Building Energy Consumption Predictor ⚡</h1>", unsafe_allow_html=True)
 
 # Adding a subtitle or description below the title
-st.markdown("<div class='subtitle'>Optimize energy usage with your eco-conultant friend.</div>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>Optimize energy usage with your eco-consultant friend.</div>", unsafe_allow_html=True)
 
 # Use columns to position the Superman image just below the middle of the title
 col1, col2, col3 = st.columns([1,0.5,1])
@@ -56,7 +56,7 @@ col1, col2, col3 = st.columns([1,0.5,1])
 with col2:
     st.image("superman.png", width=160)  # Adjust the width as needed
 
-# Define other elements of the sidebar or main page below this
+# Sidebar header
 st.sidebar.header('Enter the features')
 
 # Load your model
@@ -69,13 +69,7 @@ unique_campus_buildings = ['14', '16', '115', '116', '117', '118', '120', '123',
 def preprocess(input_data):
     return input_data  # This should reflect the actual preprocessing used
 
-
-
-
-st.sidebar.header('Enter the features')
-
 # Sidebar Inputs
-# Ensure all values are properly formatted with their units
 campus_building = st.sidebar.selectbox('Campus Building ID', unique_campus_buildings)
 built_year = st.sidebar.number_input('Built Year', 1899, 2019, 1967)
 gross_floor_area = st.sidebar.number_input('Gross Floor Area (ft²)', 4250, 5459749, 145558)
@@ -114,7 +108,6 @@ if st.sidebar.button('Predict Consumption'):
                                      'wind_direction', 'is_holiday', 'is_semester', 'is_exam', 'minute',
                                      'hour', 'day_of_week', 'month', 'year', 'category'])
 
-    # Display key feature values
     # CSS to inject
     css_style = """
     <style>
@@ -141,7 +134,6 @@ if st.sidebar.button('Predict Consumption'):
         }
     </style>
     """
-    # CSS with updated animation definitions
     css_animation = """
     <style>
         @keyframes fadeIn {
@@ -149,19 +141,20 @@ if st.sidebar.button('Predict Consumption'):
             to { opacity: 1; }
         }
         .animated {
-            opacity: 0;  # Start with invisible
+            opacity: 0;  /* Start with invisible */
             animation-name: fadeIn;
             animation-duration: 1s;
-            animation-fill-mode: forwards;  # Keeps the element visible after animation
+            animation-fill-mode: forwards;  /* Keeps the element visible after animation */
         }
         .visible {
-            opacity: 1;  # Ensure it stays visible after first animation
+            opacity: 1;  /* Ensure it stays visible after first animation */
         }
     </style>
     """ 
 
     # Inject CSS
     st.markdown(css_style, unsafe_allow_html=True)
+
     # Display styled key feature values
     st.markdown(f"""
     <div class="feature-box">
@@ -175,28 +168,25 @@ if st.sidebar.button('Predict Consumption'):
     </div>
     """, unsafe_allow_html=True)
 
-
-
-    # CSS and HTML setup
     css_style = """
     <style>
         .prediction-title {
-            display: flex;  # Enables flexbox
-            align-items: center;  # Vertically centers the items in the container
-            justify-content: center;  # Horizontally centers the content
+            display: flex;  /* Enables flexbox */
+            align-items: center;  /* Vertically centers the items in the container */
+            justify-content: center;  /* Horizontally centers the content */
             text-align: center;
         }
         .blinking {
             animation: blink-animation 1.5s steps(5, start) infinite;
             -webkit-animation: blink-animation 1.5s steps(5, start) infinite;
             color: gold;
-            font-size: 24px;  # Adjust this if the icon size doesn't match the text size
-            margin-right: 5px;  # Adjust spacing between the icon and the text
-            vertical-align: middle;  # Helps align the icon with the text
+            font-size: 24px;  /* Adjust this if the icon size doesn't match the text size */
+            margin-right: 5px;  /* Adjust spacing between the icon and the text */
+            vertical-align: middle;  /* Helps align the icon with the text */
         }
         h2 {
             margin: 0;
-            white-space: nowrap;  # Prevents the text from wrapping
+            white-space: nowrap;  /* Prevents the text from wrapping */
         }
         @keyframes blink-animation {
             to {
@@ -223,26 +213,9 @@ if st.sidebar.button('Predict Consumption'):
     <div class="prediction-title">
     <span class="blinking">⚡</span><h2 style="display: inline;">Predicted Energy Consumption: {prediction[0]:.3f} kWh</h2>
     </div>
-
     """, unsafe_allow_html=True)
 
-
-    # # Predict consumption
-    # processed_features = preprocess(features)
-    # prediction = model.predict(processed_features)
-
-    # # Display title and prediction with the blinking emoji
-    # st.markdown(f"""
-    # <div class="prediction-title">
-    #     <span class="blinking">⚡</span><h2 style="display: inline; margin-left: 10px;">Predicted Energy Consumption: {prediction[0]:.3f} kWh</h2>
-    # </div>
-    # """, unsafe_allow_html=True)
-
-    # Optional: Add the feature importance visualization code below
     # Feature importance visualization (Optional)
-    # Visualize the importance of features if necessary
-    plt.show()
-    # Feature importance visualization (Normalized ratios)
     max_values = {
         'gross_floor_area': 5459749,
         'room_area': 15176,
@@ -253,47 +226,23 @@ if st.sidebar.button('Predict Consumption'):
         'relative_humidity': 100,
         'wind_speed': 63.0,
         'wind_direction': 359,
-        
     }
     relevant_features = features[['gross_floor_area', 'room_area', 'capacity', 'apparent_temperature',
                                   'air_temperature', 'dew_point_temperature', 'relative_humidity',
                                   'wind_speed', 'wind_direction']]
     ratios = relevant_features.iloc[0] / pd.Series(max_values)
     z = ratios.sum()
-    normalized_ratios = 100*ratios / z
+    normalized_ratios = 100 * ratios / z
 
-    
     fig = px.bar(
-    normalized_ratios,
-    x=normalized_ratios.index,
-    y=normalized_ratios.values,  # explicitly referring to the values
-    title="Feature Contributions to Predicted Energy Consumption",
-    labels={"index": "Features", "y": "Feature Contribution %"}  # Changing 'value' to 'y'
+        normalized_ratios,
+        x=normalized_ratios.index,
+        y=normalized_ratios.values,  # explicitly referring to the values
+        title="Feature Contributions to Predicted Energy Consumption",
+        labels={"index": "Features", "y": "Feature Contribution %"}  # Changing 'value' to 'y'
     )
     fig.update_layout(
-    transition_duration=500,
-    yaxis_title="Normalized Feature Contribution %"  # Explicitly setting y-axis title
+        transition_duration=500,
+        yaxis_title="Feature Contribution %"  # Explicitly setting y-axis title
     )
     st.plotly_chart(fig, use_container_width=True)
-
-
-    # # Assuming 'normalized_ratios' is calculated as before
-    # fig = px.bar(
-    #     normalized_ratios,
-    #     x=normalized_ratios.index,
-    #     y=normalized_ratios,
-    #     title="Normalized Feature Contributions to Predicted Energy Consumption",
-    #     labels={"index": "Features", "value": "Normalized Feature Contribution %"}
-    # )
-    # fig.update_layout(transition_duration=500)  # adds a simple animation
-
-    # st.plotly_chart(fig, use_container_width=True)
-
-
-
-    # plt.figure(figsize=(10, 4))
-    # plt.bar(normalized_ratios.index, normalized_ratios, color='lightblue')
-    # plt.xticks(rotation=90)
-    # plt.ylabel('Normalized Feature Contribution %')
-    # plt.title('Normalized Feature Contributions to Predicted Energy Consumption')
-    # st.pyplot(plt.gcf())
